@@ -1,6 +1,6 @@
 <?php
 
-namespace CodePress\CodeCategory\Tests;
+namespace CodePress\CodeDatabase\Tests;
 
 use Orchestra\Testbench\TestCase;
 
