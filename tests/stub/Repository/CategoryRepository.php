@@ -9,12 +9,6 @@ use CodePress\CodeDatabase\AbstractRepository;
 class CategoryRepository extends AbstractRepository
 {
 
-
-    public function delete($id)
-    {
-        // TODO: Implement delete() method.
-    }
-
     public function find($id, $columns = array('*'))
     {
         // TODO: Implement find() method.
