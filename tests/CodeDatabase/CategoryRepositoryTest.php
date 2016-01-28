@@ -17,11 +17,25 @@ class CategoryRepositoryTest extends AbstractTestCase
         $this->migrate();
     }
 
-    public function test_can_model(){
+    public function test_can_model()
+    {
         $repository = new CategoryRepository();
-        $this->assertEquals(Category::class,$repository->model());
+        $this->assertEquals(Category::class, $repository->model());
     }
 
+    public function test_can_makemodel()
+    {
+        $repository = new CategoryRepository();
+        $result = $repository->makeModel();
+        $this->assertInstanceOf(Category::class, $result);
+
+        $reflectionClass = new \ReflectionClass($repository);
+        $reflectionProperty = $reflectionClass->getProperty('model');
+        $reflectionProperty->setAccessible(true);
+
+        $result = $reflectionProperty->getValue($repository);
+        $this->assertInstanceOf(Category::class, $result);
+    }
 
 
 }
