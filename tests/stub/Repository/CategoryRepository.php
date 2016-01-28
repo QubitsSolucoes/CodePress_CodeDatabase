@@ -10,10 +10,6 @@ class CategoryRepository extends AbstractRepository
 {
 
 
-    public function all($columns = array('*'))
-    {
-        // TODO: Implement all() method.
-    }
 
     public function create(array $data)
     {
