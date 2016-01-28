@@ -10,12 +10,6 @@ class CategoryRepository extends AbstractRepository
 {
 
 
-
-    public function create(array $data)
-    {
-        // TODO: Implement create() method.
-    }
-
     public function update(array $data, $id)
     {
         // TODO: Implement update() method.
