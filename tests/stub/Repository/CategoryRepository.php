@@ -9,11 +9,6 @@ use CodePress\CodeDatabase\AbstractRepository;
 class CategoryRepository extends AbstractRepository
 {
 
-    public function find($id, $columns = array('*'))
-    {
-        // TODO: Implement find() method.
-    }
-
     public function findBy($field, $value, $columns = array('*'))
     {
         // TODO: Implement findBy() method.
