@@ -13,6 +13,8 @@ abstract class AbstractRepository implements RepositoryInterface, CriteriaCollec
      */
     protected $model;
 
+    protected $criteriaCollection = [];
+
     public function __construct()
     {
         $this->makeModel();
@@ -65,7 +67,7 @@ abstract class AbstractRepository implements RepositoryInterface, CriteriaCollec
     }
 
     public function getCriteriaCollection(){
-
+        return $this->criteriaCollection;
     }
 
     public function getByCriteria(CriteriaInterface $criteriaInterface){
