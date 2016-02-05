@@ -2,10 +2,12 @@
 
 namespace CodePress\CodeDatabase\Tests;
 
+use CodePress\CodeDatabase\Criteria\FindByNameAndDescription;
 use CodePress\CodeDatabase\Models\Category;
 use CodePress\CodeDatabase\Repository\CategoryRepository;
 use CodePress\CodeDatabase\Contracts\CriteriaInterface;
 use CodePress\CodeDatabase\Contracts\CriteriaCollection;
+use Illuminate\Database\Eloquent\Builder;
 use Mockery as m;
 
 class CategoryRepositoryCriteriaTest extends AbstractTestCase
@@ -28,16 +30,31 @@ class CategoryRepositoryCriteriaTest extends AbstractTestCase
         $this->assertInstanceOf(CriteriaCollection::class, $this->repository);
     }
 
-    public function test_can_get_criteriacollection(){
+    public function test_can_get_criteriacollection()
+    {
         $result = $this->repository->getCriteriaCollection();
-        $this->assertCount(0,$result);
+        $this->assertCount(0, $result);
     }
 
-    public function test_can_add_criteria(){
+    public function test_can_add_criteria()
+    {
         $mockCriteria = m::mock(CriteriaInterface::class);
         $result = $this->repository->addCriteria($mockCriteria);
-        $this->assertInstanceOf(CategoryRepository::class,$result);
-        $this->assertCount(1,$this->repository->getCriteriaCollection());
+        $this->assertInstanceOf(CategoryRepository::class, $result);
+        $this->assertCount(1, $this->repository->getCriteriaCollection());
+    }
+
+    public function test_can_getbycriteria()
+    {
+        $criteria = new FindByNameAndDescription('Category 1', 'Description 1');
+        $repository = $this->repository->getByCriteria($criteria);
+        $this->assertInstanceOf(CategoryRepository::class, $repository);
+
+        $result = $repository->all();
+        $this->assertCount(1, $result);
+        $result = $result->first();
+        $this->assertEquals($result->name, 'Category 1');
+        $this->assertEquals($result->description, 'Description 1');
     }
 
     /*public function test_can_model()

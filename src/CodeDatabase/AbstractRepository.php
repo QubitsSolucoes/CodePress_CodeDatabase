@@ -8,9 +8,6 @@ use CodePress\CodeDatabase\Contracts\CriteriaInterface;
 
 abstract class AbstractRepository implements RepositoryInterface, CriteriaCollection
 {
-    /**
-     * @var \Illuminate\Database\Eloquent\Model
-     */
     protected $model;
 
     protected $criteriaCollection = [];
@@ -71,8 +68,9 @@ abstract class AbstractRepository implements RepositoryInterface, CriteriaCollec
         return $this->criteriaCollection;
     }
 
-    public function getByCriteria(CriteriaInterface $criteriaInterface){
-
+    public function getByCriteria(CriteriaInterface $criteria){
+        $this->model = $criteria->apply($this->model,$this);
+        return $this;
     }
 
     public function applyCriteria(){
