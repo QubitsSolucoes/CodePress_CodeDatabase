@@ -1,8 +1,6 @@
 <?php
 
-namespace CodePress\CodeDatabase;
-
-use CodePress\CodeDatabase\Contracts\RepositoryInterface;
+namespace CodePress\CodeDatabase\Contracts;
 
 interface CriteriaInterface
 {
