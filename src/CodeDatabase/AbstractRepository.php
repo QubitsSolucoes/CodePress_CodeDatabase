@@ -79,13 +79,18 @@ abstract class AbstractRepository implements RepositoryInterface, CriteriaCollec
     }
 
     public function applyCriteria(){
+
+        if($this->isIgnoreCriteria){
+            return $this;
+        }
+
         foreach($this->getCriteriaCollection() as $criteria){
             $this->model = $criteria->apply($this->model,$this);
         }
         return $this;
     }
 
-    public function ignoreCriteria($isIgnore)
+    public function ignoreCriteria($isIgnore = true)
     {
         $this->isIgnoreCriteria = $isIgnore;
         return $this;

@@ -149,6 +149,10 @@ class CategoryRepositoryCriteriaTest extends AbstractTestCase
         $result = $reflectionProperty->getValue($this->repository);
         $this->assertFalse($result);
 
+        $this->repository->ignoreCriteria();
+        $result = $reflectionProperty->getValue($this->repository);
+        $this->assertTrue($result);
+
         $this->repository->ignoreCriteria(true);
         $result = $reflectionProperty->getValue($this->repository);
         $this->assertTrue($result);
@@ -158,6 +162,36 @@ class CategoryRepositoryCriteriaTest extends AbstractTestCase
         $this->assertFalse($result);
 
         $this->assertInstanceOf(CategoryRepository::class,$this->repository->ignoreCriteria(false));
+    }
+
+    public function test_can_ignoreCriteria_with_applyCriteria()
+    {
+
+        $this->createCategoryDescription();
+
+        $criteria1 = new FindByDescription('Description');
+        $criteria2 = new OrderDescByName();
+
+        $this->repository
+            ->addCriteria($criteria1)
+            ->addCriteria($criteria2);
+
+        $this->repository->ignoreCriteria();
+        $this->repository->applyCriteria();
+        $reflectionClass = new \ReflectionClass($this->repository);
+        $reflectionProperty = $reflectionClass->getProperty('model');
+        $reflectionProperty->setAccessible(true);
+        $result = $reflectionProperty->getValue($this->repository);
+        $this->assertInstanceOf(Category::class, $result);
+
+        $this->repository->ignoreCriteria(false);
+        $repository = $this->repository->applyCriteria();
+        $this->assertInstanceOf(CategoryRepository::class, $repository);
+
+        $result = $repository->all();
+        $this->assertCount(3, $result);
+        $this->assertEquals($result[0]->name, 'Category Um');
+        $this->assertEquals($result[1]->name, 'Category Dois');
     }
 
     private function createCategoryDescription()
