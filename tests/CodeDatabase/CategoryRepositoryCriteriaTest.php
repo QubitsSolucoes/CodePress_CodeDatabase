@@ -194,6 +194,26 @@ class CategoryRepositoryCriteriaTest extends AbstractTestCase
         $this->assertEquals($result[1]->name, 'Category Dois');
     }
 
+    public function test_can_clear_criterias()
+    {
+        $this->createCategoryDescription();
+
+        $criteria1 = new FindByName('Category Dois');
+        $criteria2 = new OrderDescById();
+
+        $this->repository->addCriteria($criteria1)
+            ->addCriteria($criteria2);
+        $this->assertInstanceOf(CategoryRepository::class, $this->repository->clearCriteria());
+        $result = $this->repository->findby('description', 'Description');
+        $this->assertCount(3, $result);
+        $reflectionClass = new \ReflectionClass($this->repository);
+        $reflectionProperty = $reflectionClass->getProperty('model');
+        $reflectionProperty->setAccessible(true);
+        $result = $reflectionProperty->getValue($this->repository);
+        $this->assertInstanceOf(Category::class, $result);
+
+    }
+
     private function createCategoryDescription()
     {
         Category::create([
