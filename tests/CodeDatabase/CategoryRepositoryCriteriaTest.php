@@ -5,6 +5,7 @@ namespace CodePress\CodeDatabase\Tests;
 use CodePress\CodeDatabase\Criteria\FindByDescription;
 use CodePress\CodeDatabase\Criteria\FindByName;
 use CodePress\CodeDatabase\Criteria\FindByNameAndDescription;
+use CodePress\CodeDatabase\Criteria\OrderDescById;
 use CodePress\CodeDatabase\Criteria\OrderDescByName;
 use CodePress\CodeDatabase\Models\Category;
 use CodePress\CodeDatabase\Repository\CategoryRepository;
@@ -75,7 +76,7 @@ class CategoryRepositoryCriteriaTest extends AbstractTestCase
         $this->assertInstanceOf(CategoryRepository::class, $repository);
 
         $result = $repository->all();
-        $this->assertCount(2, $result);
+        $this->assertCount(3, $result);
         $this->assertEquals($result[0]->name, 'Category Um');
         $this->assertEquals($result[1]->name, 'Category Dois');
     }
@@ -91,7 +92,7 @@ class CategoryRepositoryCriteriaTest extends AbstractTestCase
         $this->repository->addCriteria($criteria1)
             ->addCriteria($criteria2);
         $result = $this->repository->all();
-        $this->assertCount(2, $result);
+        $this->assertCount(3, $result);
         $this->assertEquals($result[0]->name, 'Category Um');
         $this->assertEquals($result[1]->name, 'Category Dois');
     }
@@ -121,10 +122,28 @@ class CategoryRepositoryCriteriaTest extends AbstractTestCase
         $this->repository->addCriteria($criteria1)
             ->addCriteria($criteria2);
         $result = $this->repository->find(5);
-        $this->assertEquals($result->name,'Category Um');
+        $this->assertEquals($result->name, 'Category Um');
     }
 
-    private function createCategoryDescription(){
+    public function test_can_findby_categories_with_criteria()
+    {
+        $this->createCategoryDescription();
+
+        $criteria1 = new FindByName('Category Dois');
+        $criteria2 = new OrderDescById();
+
+        $this->repository->addCriteria($criteria1)
+            ->addCriteria($criteria2);
+        $result = $this->repository->findby('description', 'Description');
+        $this->assertCount(2, $result);
+        $this->assertEquals($result[0]->id, 6);
+        $this->assertEquals($result[0]->name, 'Category Dois');
+        $this->assertEquals($result[1]->id, 4);
+        $this->assertEquals($result[1]->name, 'Category Dois');
+    }
+
+    private function createCategoryDescription()
+    {
         Category::create([
             'name' => 'Category Dois',
             'description' => 'Description'
@@ -132,6 +151,11 @@ class CategoryRepositoryCriteriaTest extends AbstractTestCase
 
         Category::create([
             'name' => 'Category Um',
+            'description' => 'Description'
+        ]);
+
+        Category::create([
+            'name' => 'Category Dois',
             'description' => 'Description'
         ]);
     }
